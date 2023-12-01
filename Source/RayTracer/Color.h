@@ -1,5 +1,5 @@
 #pragma once
-#include <../glm/glm/glm.hpp>
+#include <glm/glm.hpp>
 
 using color3_t = glm::vec3;
 using color4_t = glm::vec4;

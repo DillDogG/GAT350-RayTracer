@@ -1,5 +1,5 @@
 #pragma once
-#include <../glm/glm/glm.hpp>
+#include <glm/glm.hpp>
 
 struct ray_t {
 	ray_t() = default;

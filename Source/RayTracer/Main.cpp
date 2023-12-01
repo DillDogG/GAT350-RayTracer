@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Random.h"
+#include "Camera.h"
 #include <iostream>
 #include <string>
 
