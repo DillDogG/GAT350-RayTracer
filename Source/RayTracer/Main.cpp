@@ -31,16 +31,19 @@ int main(int, char**) {
 	//}
 	// create material
 	auto lambertian = std::make_shared<Lambertian>(color3_t{ 0, 0, 1 });
-	auto metal = std::make_shared<Metal>(color3_t{ 1, 1, 1 }, 0.0f);
+	//auto metal = std::make_shared<Metal>(color3_t{ 1, 1, 1 }, 0.0f);
 
 	// create objects -> add to scene
 	for (int i = 0; i < 10; i++)
 	{
-		std::shared_ptr<Material> material = (rand() % 2) ? std::dynamic_pointer_cast<Material>(lambertian) : std::dynamic_pointer_cast<Material>(metal);
+		std::shared_ptr<Material> material = (rand() % 2) ? std::dynamic_pointer_cast<Material>(lambertian) : std::dynamic_pointer_cast<Material>(lambertian);
 		auto sphere = std::make_unique<Sphere>(random(glm::vec3{ -0.5 }, glm::vec3{ 0.5 }), randomf(0.0625, 0.25), material);
 		scene.AddObject(std::move(sphere));
 	}
-	
+	scene.Render(canvas, 50);
+	canvas.Update();
+
+	renderer->PresentCanvas(canvas);
 	bool quit = false;
 	while (!quit) {
 		SDL_Event event;
@@ -52,10 +55,7 @@ int main(int, char**) {
 		}
 		canvas.Clear({ 0, 0, 0, 1 });
 		//for (int i = 0; i < 1000; i++) canvas.DrawPoint({ randomf(0, canvas.GetSize().x), randomf(0, canvas.GetSize().y) }, { randomf(0, 1), randomf(0, 1), randomf(0, 1), 1 });
-		scene.Render(canvas);
-		canvas.Update();
-
-		renderer->PresentCanvas(canvas);
+		
 	}
 	
 	renderer->Shutdown();
