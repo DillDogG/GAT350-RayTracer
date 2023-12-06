@@ -2,6 +2,8 @@
 #include "Canvas.h"
 #include "Random.h"
 #include "MathUtils.h"
+#include <iostream>
+#include <iomanip>
 
 void Scene::Render(Canvas& canvas, int numSamples) {
 	{
@@ -14,8 +16,7 @@ void Scene::Render(Canvas& canvas, int numSamples) {
 			for (int x = 0; x < canvas.GetSize().x; x++) {
 				glm::vec2 pixel = glm::vec2{ x, y };
 				color3_t color{ 0 };
-				for (int i = 0; i < numSamples; i++)
-				{
+				for (int i = 0; i < numSamples; i++) {
 					// get normalized (0 - 1) point coordinates from pixel
 					// add random x and y offset (0-1) to each pixel
 					glm::vec2 point = (pixel + glm::vec2{ randomf(), randomf() }) / (glm::vec2)canvas.GetSize();
@@ -33,6 +34,7 @@ void Scene::Render(Canvas& canvas, int numSamples) {
 				color /= numSamples;
 				canvas.DrawPoint(pixel, color4_t(color, 1));
 			}
+			std::cout << std::setprecision(2) << std::setw(5) << (((float)y / canvas.GetSize().y) * 100) << "%\n";
 		}
 		// draw color to canvas point (pixel)
 		// get average color (average = (color + color + color) / number of samples)
@@ -75,8 +77,8 @@ color3_t Scene::Trace(const ray_t& ray, float minDistance, float maxDistance, ra
 			return color * Trace(scattered, minDistance, maxDistance, raycastHit, depth - 1);
 		}
 		else {
-			// reached maximum depth of bounces (color is black)
-			return color3_t{ 0, 0, 0 };
+			// reached maximum depth of bounces (get emissive color, will be black except for Emissive materials)
+			return raycastHit.material->GetEmissive();
 		}
 	}
 	// if ray not hit, return scene sky color
