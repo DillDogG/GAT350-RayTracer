@@ -2,10 +2,11 @@
 #include "Canvas.h"
 #include "Random.h"
 #include "MathUtils.h"
+//#include "Sphere.h"
 #include <iostream>
 #include <iomanip>
 
-void Scene::Render(Canvas& canvas, int numSamples) {
+void Scene::Render(Canvas& canvas, int numSamples, int depth) {
 	{
 		// create vec2 pixel from canvas x,y
 
@@ -29,7 +30,7 @@ void Scene::Render(Canvas& canvas, int numSamples) {
 					// cast ray into scene
 					// add color value from trace
 					raycastHit_t raycastHit;
-					color += Trace(ray, 0, 100, raycastHit, m_depth);
+					color += Trace(ray, 0, 100, raycastHit, depth);
 				}
 				color /= numSamples;
 				canvas.DrawPoint(pixel, color4_t(color, 1));
