@@ -14,8 +14,8 @@ using namespace std;
 
 const int width = 400;
 const int height = 300;
-const int samples = 20;
-const int depth = 5;
+const int samples = 200;
+const int depth = 6;
 
 void InitScene01(Scene& scene, const Canvas& canvas);
 void InitScene02(Scene& scene, const Canvas& canvas);
@@ -30,11 +30,11 @@ int main(int, char**) {
 	Canvas canvas(width, height, *renderer);
 
 	float aspectRatio = canvas.GetSize().x / (float)canvas.GetSize().y;
-	std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3{ 0, 0, 10 }, glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, 20.0f, aspectRatio);
+	std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3{ 0, 1, 10 }, glm::vec3{ 0, 1, 0 }, glm::vec3{ 0, 1, 0 }, 20.0f, aspectRatio);
 	//std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3{ 0, 2, 10 }, glm::vec3{ 0, 1, 0 }, glm::vec3{ 0, 1, 0 }, 20.0f, aspectRatio);
 
 	Scene scene(glm::vec3{ 1.0f }, glm::vec3{ 0.5f, 0.7f, 1.0f }); // sky color could be set with the top and bottom color
-	InitScene01(scene, canvas);
+	InitScene02(scene, canvas);
 	scene.SetCamera(camera);
 	auto material = std::make_shared<Lambertian>(color3_t{ 0, 0, 1 });
 
@@ -149,10 +149,29 @@ void InitScene02(Scene& scene, const Canvas& canvas) {
 	//auto triangle = std::make_unique<Triangle>(glm::vec3{ -1, 0, 0 }, glm::vec3{ 1, 0, 0 }, glm::vec3{ 0, 2, 0 }, std::make_shared<Lambertian>(color3_t{ 1, 0, 0 }));
 	//scene.AddObject(std::move(triangle));
 
-	auto plane = std::make_unique<Plane>(glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, std::make_shared<Lambertian>(color3_t{ 0.2f }));
+	auto plane = std::make_unique<Plane>(glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, std::make_shared<Lambertian>(color3_t{ 1 }));
 	scene.AddObject(std::move(plane));
+
+	plane = std::make_unique<Plane>(glm::vec3{ 0, 5, 0 }, glm::vec3{ 0, 1, 0 }, std::make_shared<Emissive>(color3_t{ 1 }, 3));
+	scene.AddObject(std::move(plane));
+	
+	plane = std::make_unique<Plane>(glm::vec3{ -2, 0, 0 }, glm::vec3{ 1, 0, 0 }, std::make_shared<Lambertian>(color3_t{ 1, 0, 0 }));
+	scene.AddObject(std::move(plane));
+	
+	plane = std::make_unique<Plane>(glm::vec3{ 2, 0, 0 }, glm::vec3{ 1, 0, 0 }, std::make_shared<Lambertian>(color3_t{ 0, 1, 0 }));
+	scene.AddObject(std::move(plane));
+	
+	plane = std::make_unique<Plane>(glm::vec3{ 0, 0, -3 }, glm::vec3{ 0, 0, 1 }, std::make_shared<Lambertian>(color3_t{ 1 }));
+	scene.AddObject(std::move(plane));
+
+	auto sphere = std::make_unique<Sphere>(glm::vec3{ -1.5f, 0.75f, -1.5f }, 0.75f, std::make_shared<Lambertian>(color3_t{ 1, 0, 0 }));
+	scene.AddObject(std::move(sphere));
 
 	auto mesh = std::make_unique<Mesh>(std::make_shared<Lambertian>(color3_t{ 0, 0, 1 }));
 	mesh->Load("models/cube.obj", glm::vec3{ 0, 0.5f, 0 }, glm::vec3{ 0, 45, 0 });
 	scene.AddObject(std::move(mesh));
+
+	//mesh = std::make_unique<Mesh>(std::make_shared<Emissive>(color3_t{ 1, 1, 1 }, 5));
+	//mesh->Load("models/cube.obj", glm::vec3{ 0, 3.5f, 0 }, glm::vec3{ 0, 0, 0 });
+	//scene.AddObject(std::move(mesh));
 }
